@@ -1,24 +1,19 @@
 package it.sogei.mongohack.huskyme.sensorpusher.components.mongoconnector;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.TypeAdapter;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
 import com.mongodb.client.*;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import it.sogei.mongohack.huskyme.sensorpusher.components.mongoconnector.ifaces.IMongoConnector;
-import it.sogei.mongohack.huskyme.sensorpusher.model.AMisurazione;
 import it.sogei.mongohack.huskyme.sensorpusher.model.Animale;
 import it.sogei.mongohack.huskyme.sensorpusher.model.Padrone;
-import it.sogei.mongohack.huskyme.sensorpusher.model.enums.ETipo;
+import it.sogei.mongohack.huskyme.sensorpusher.model.Sensore;
 import it.sogei.mongohack.huskyme.sensorpusher.util.GsonUtil;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
-import java.io.IOException;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -72,7 +67,7 @@ public class MongoConnector implements IMongoConnector {
 
     @Override
     public List<Animale> getAnimaleDi(Padrone p) {
-        MongoCollection<Document> animaliCollection = this.database.getCollection("animali");
+       MongoCollection<Document> animaliCollection = this.database.getCollection("animali");
 
         Bson search = Filters.eq("codPadrone", p.getCodPadrone());
 
@@ -82,7 +77,7 @@ public class MongoConnector implements IMongoConnector {
     }
 
     @Override
-    public void aggiungiMisurazione(AMisurazione misurazione) {
+    public void aggiungiMisurazione(Sensore misurazione) {
         MongoCollection<Document> sensoriCollection = this.database.getCollection("sensori");
 
         Document toIns = Document.parse(this.gson.toJson(misurazione)).append("_id",new ObjectId());

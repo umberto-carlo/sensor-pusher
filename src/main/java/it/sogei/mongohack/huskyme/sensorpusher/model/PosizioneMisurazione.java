@@ -8,14 +8,10 @@ import java.util.List;
 
 @Setter
 @Getter
-public class PosizioneMisurazione extends AMisurazione {
+public class PosizioneMisurazione {
     private List<Double> coordinate;
 
     {
         this.coordinate = new LinkedList<>();
-    }
-
-    public PosizioneMisurazione() {
-        super(1);
     }
 }

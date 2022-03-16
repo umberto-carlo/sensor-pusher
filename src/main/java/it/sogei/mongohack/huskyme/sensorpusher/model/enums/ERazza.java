@@ -6,7 +6,10 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public enum ERazza {
-    NORVEGESE(1, "Norvegese delle foreste");
+    NORVEGESE(1, "Norvegese delle foreste"),
+    LABRADOR(2,"Labrador"),
+    CIP_CIP(3,"Cip cip"),
+    TARTA_RAZZA(4,"Tartarazza");
 
     private static Map<Integer, ERazza> mappone;
 

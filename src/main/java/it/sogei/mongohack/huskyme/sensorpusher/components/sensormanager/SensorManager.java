@@ -6,14 +6,20 @@ import it.sogei.mongohack.huskyme.sensorpusher.components.sensormanager.util.Mis
 import it.sogei.mongohack.huskyme.sensorpusher.model.Animale;
 import it.sogei.mongohack.huskyme.sensorpusher.model.FitBeastMisurazione;
 import it.sogei.mongohack.huskyme.sensorpusher.model.PosizioneMisurazione;
+import it.sogei.mongohack.huskyme.sensorpusher.model.Sensore;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class SensorManager implements ISensorManager {
     @Setter
     private IMongoConnector mongoConnector;
+    private String getTimeStamp() {
+        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
 
+        return LocalDateTime.now().format(formatter);
+    }
     @Override
     public void misurazioniRandom(Animale a, int delta, int minutiMisurazioni) {
         LocalDateTime start = LocalDateTime.now();
@@ -26,8 +32,15 @@ public class SensorManager implements ISensorManager {
             PosizioneMisurazione posMis = misurazioneBuilder.getRandomPosizione(a);
             FitBeastMisurazione fitMis = misurazioneBuilder.getFitBeastMisurazione(a);
 
-            this.mongoConnector.aggiungiMisurazione(posMis);
-            this.mongoConnector.aggiungiMisurazione(fitMis);
+            Sensore sensore = new Sensore();
+
+            sensore.setIdAnimale(a.getIdAnimale());
+            sensore.setTimeStamp(getTimeStamp());
+            sensore.setSensorePosizione(posMis);
+            sensore.setSensoreFit(fitMis);
+
+            this.mongoConnector.aggiungiMisurazione(sensore);
+            //this.mongoConnector.aggiungiMisurazione(sensore);
 
             try {
                 Thread.sleep(delta);

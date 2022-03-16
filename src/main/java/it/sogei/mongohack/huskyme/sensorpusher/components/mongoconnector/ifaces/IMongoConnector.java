@@ -1,8 +1,9 @@
 package it.sogei.mongohack.huskyme.sensorpusher.components.mongoconnector.ifaces;
 
-import it.sogei.mongohack.huskyme.sensorpusher.model.AMisurazione;
+
 import it.sogei.mongohack.huskyme.sensorpusher.model.Animale;
 import it.sogei.mongohack.huskyme.sensorpusher.model.Padrone;
+import it.sogei.mongohack.huskyme.sensorpusher.model.Sensore;
 
 import java.util.List;
 
@@ -15,5 +16,5 @@ public interface IMongoConnector {
 
     public List<Animale> getAnimaleDi(Padrone p);
 
-    public void aggiungiMisurazione(AMisurazione misurazione);
+    public void aggiungiMisurazione(Sensore misurazione);
 }

@@ -12,7 +12,10 @@ import java.util.stream.Stream;
 
 
 public enum ETipo {
-    GATTO(1, "Gatto");
+    GATTO(1, "Gatto"),
+    CANE(2,"Cane"),
+    STRUZZO(3,"Struzzo"),
+    TARTARUGA(4,"Tartaruga");
 
     private static Map<Integer, ETipo> mappone;
 

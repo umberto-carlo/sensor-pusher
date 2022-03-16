@@ -5,12 +5,8 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class FitBeastMisurazione extends AMisurazione {
+public class FitBeastMisurazione{
     private double temperatura;
     private Pressione pressione;
     private int battiti;
-
-    public FitBeastMisurazione() {
-        super(2);
-    }
 }
