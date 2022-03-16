@@ -67,7 +67,7 @@ public class MongoConnector implements IMongoConnector {
 
     @Override
     public List<Animale> getAnimaleDi(Padrone p) {
-       MongoCollection<Document> animaliCollection = this.database.getCollection("animali");
+        MongoCollection<Document> animaliCollection = this.database.getCollection("animali");
 
         Bson search = Filters.eq("codPadrone", p.getCodPadrone());
 
@@ -80,7 +80,9 @@ public class MongoConnector implements IMongoConnector {
     public void aggiungiMisurazione(Sensore misurazione) {
         MongoCollection<Document> sensoriCollection = this.database.getCollection("sensori");
 
-        Document toIns = Document.parse(this.gson.toJson(misurazione)).append("_id",new ObjectId());
+        Document toIns = Document.parse(this.gson.toJson(misurazione));
+        toIns.remove("timeStamp");
+        toIns.append("timeStamp", misurazione.getTimeStamp()).append("_id", new ObjectId());
 
         sensoriCollection.insertOne(toIns);
     }

@@ -11,15 +11,19 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.Optional;
 
 public class SensorManager implements ISensorManager {
     @Setter
     private IMongoConnector mongoConnector;
+
     private String getTimeStamp() {
         DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
 
         return LocalDateTime.now().format(formatter);
     }
+
     @Override
     public void misurazioniRandom(Animale a, int delta, int minutiMisurazioni) {
         LocalDateTime start = LocalDateTime.now();
@@ -28,14 +32,27 @@ public class SensorManager implements ISensorManager {
 
         MisurazioneRandomBuilder misurazioneBuilder = new MisurazioneRandomBuilder();
 
-        for (LocalDateTime now = LocalDateTime.now(); now.isBefore(to);now = LocalDateTime.now()){
+        LocalDateTime dataUltimoCampione = LocalDateTime.now();
+
+        int SECONDI_PER_CAMPIONE = 20;
+
+        for (LocalDateTime now = LocalDateTime.now(); now.isBefore(to); now = LocalDateTime.now()) {
             PosizioneMisurazione posMis = misurazioneBuilder.getRandomPosizione(a);
             FitBeastMisurazione fitMis = misurazioneBuilder.getFitBeastMisurazione(a);
 
             Sensore sensore = new Sensore();
 
+            if (now.isAfter(dataUltimoCampione.plusSeconds(SECONDI_PER_CAMPIONE))) {
+                sensore.setCampione(true);
+                dataUltimoCampione = now;
+            } else {
+                sensore.setCampione(false);
+            }
+
+            sensore.setAllarme(fitMis.isAllarmante());
+
             sensore.setIdAnimale(a.getIdAnimale());
-            sensore.setTimeStamp(getTimeStamp());
+            sensore.setTimeStamp(new Date());
             sensore.setSensorePosizione(posMis);
             sensore.setSensoreFit(fitMis);
 
@@ -48,8 +65,7 @@ public class SensorManager implements ISensorManager {
                 e.printStackTrace();
             }
 
-            if (now.isAfter(start.plusSeconds(30)))
-            {
+            if (now.isAfter(start.plusSeconds(30))) {
                 start = now;
                 System.out.println("30 secondi di misurazioni");
             }
