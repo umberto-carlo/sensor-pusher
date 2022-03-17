@@ -8,6 +8,7 @@ import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import it.sogei.mongohack.huskyme.sensorpusher.model.enums.ERazza;
 import it.sogei.mongohack.huskyme.sensorpusher.model.enums.ETipo;
+import it.sogei.mongohack.huskyme.sensorpusher.model.enums.ETipoAttivita;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -40,7 +41,7 @@ public final class GsonUtil {
                 jsonReader.beginObject();
                 String name = jsonReader.nextName();
                 while (!name.equals("codTipoAnimale")) {
-                    jsonReader.nextString();
+                    jsonReader.skipValue();
                     name = jsonReader.nextName();
                 }
                 int codTipoAnimale = jsonReader.nextInt();
@@ -70,7 +71,7 @@ public final class GsonUtil {
                 jsonReader.beginObject();
                 String name = jsonReader.nextName();
                 while (!name.equals("codRazza")) {
-                    jsonReader.nextString();
+                    jsonReader.skipValue();
                     name = jsonReader.nextName();
                 }
                 int codRazza = jsonReader.nextInt();
@@ -81,6 +82,36 @@ public final class GsonUtil {
                 jsonReader.endObject();
 
                 return ERazza.getRazza(codRazza);
+            }
+        });
+
+        builder.registerTypeAdapter(ETipoAttivita.class, new TypeAdapter<ETipoAttivita>() {
+            @Override
+            public void write(JsonWriter jsonWriter, ETipoAttivita tipoAttivita) throws IOException {
+                jsonWriter.beginObject();
+                jsonWriter.name("codTipoAttivita");
+                jsonWriter.value(tipoAttivita.getCodTipoAttivita());
+                jsonWriter.name("tipoAttivita");
+                jsonWriter.value(tipoAttivita.getTipoAttivita());
+                jsonWriter.endObject();
+            }
+
+            @Override
+            public ETipoAttivita read(JsonReader jsonReader) throws IOException {
+                jsonReader.beginObject();
+                String name = jsonReader.nextName();
+                while (!name.equals("codTipoAttivita")) {
+                    jsonReader.skipValue();
+                    name = jsonReader.nextName();
+                }
+                int codRazza = jsonReader.nextInt();
+                while (jsonReader.hasNext() && !jsonReader.peek().equals(JsonToken.END_OBJECT)) {
+                    jsonReader.skipValue();
+                }
+
+                jsonReader.endObject();
+
+                return ETipoAttivita.getTipo(codRazza);
             }
         });
 
